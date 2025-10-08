@@ -2,11 +2,10 @@
 
 namespace Database\Seeders;
 
-use App\Models\ItemIn;
-use App\Models\ItemInDetail;
-use App\Models\{Supplier, Product};
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\{ItemIn, ItemInDetail, Supplier, Product, StockPriode};
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\Log;
+use function fake;
 
 class ItemInSeeder extends Seeder
 {
@@ -15,34 +14,31 @@ class ItemInSeeder extends Seeder
      */
     public function run(): void
     {
-        // Ambil semua supplier dan product yang sudah ada
         $suppliers = Supplier::all();
         $products  = Product::all();
 
-        // Kalau supplier atau produk kosong, hentikan seeding
+        // Berhenti jika tidak ada data pendukung
         if ($suppliers->isEmpty() || $products->isEmpty()) {
             $this->command->warn('⚠️ Supplier atau Product belum ada. Jalankan SupplierSeeder dan ProductSeeder dulu.');
             return;
         }
 
-        // Buat 5 transaksi pembelian barang (ItemIn)
         foreach ($suppliers->take(5) as $supplier) {
             $itemIn = ItemIn::create([
                 'supplier_id' => $supplier->id,
-                'total_item'  => 0, // nanti dihitung dari detail
-                'total_price' => 0, // nanti dihitung dari detail
-                'is_paid'     => fake()->boolean(80), // 80% transaksi sudah dibayar
+                'total_item'  => 0,
+                'total_price' => 0,
+                'is_paid'     => fake()->boolean(80),
             ]);
 
             $totalItem  = 0;
             $totalPrice = 0;
 
-            // ambil 2–3 produk random per supplier
-            $chosenProducts = $products->random(rand(2, 3));
+            $chosenProducts = $products->random(min(3, $products->count()));
 
             foreach ($chosenProducts as $product) {
                 $quantity = fake()->numberBetween(10, 50);
-                $price    = $product->price_buy; // harga beli sesuai product
+                $price    = $product->price_buy ?? 0;
                 $subtotal = $quantity * $price;
 
                 ItemInDetail::create([
@@ -53,19 +49,29 @@ class ItemInSeeder extends Seeder
                     'subtotal'   => $subtotal,
                 ]);
 
-                // update stok product
-                $product->increment('quantity', $quantity);
+                // Update stok produk (jika kolom quantity ada)
+                if ($product->isFillable('quantity')) {
+                    $product->increment('quantity', $quantity);
+                }
 
-                // update StockPriode final_stock
-                $latestStockPriode = $product->stockPriodes()->latest('month')->first();
-                $latestStockPriode->increment('final_stock', $quantity);
+                // Update StockPriode jika tersedia
+                try {
+                    $latestStockPriode = $product->stockPriodes()->latest('month')->first();
+
+                    if ($latestStockPriode instanceof StockPriode) {
+                        $latestStockPriode->increment('final_stock', $quantity);
+                    }
+                } catch (\Throwable $e) {
+                    Log::warning("⚠️ Gagal update StockPriode untuk produk {$product->id}: {$e->getMessage()}");
+                }
+
                 $totalItem  += $quantity;
                 $totalPrice += $subtotal;
             }
 
-            // update total_item dan total_price di ItemIn
+            // Update total pada ItemIn
             $itemIn->update([
-                'total_item'  => $chosenProducts->count(),
+                'total_item'  => $totalItem,
                 'total_price' => $totalPrice,
             ]);
         }

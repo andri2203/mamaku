@@ -47,10 +47,10 @@
 
             <!-- Header (TIDAK DIUBAH) -->
             <header class="mb-6">
-                <div class="flex justify-center items-center gap-3 p-6 border-b border-gray-200">
+                <div class="flex flex-col justify-center items-center gap-2 pb-6 border-b border-gray-200">
                     <!-- SVG Icon: Inventory Rack -->
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
-                        class="w-10 h-10">
+                        class="w-14 h-14">
                         <defs>
                             <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
                                 <stop offset="0%" style="stop-color:#ec4899;stop-opacity:1" />
@@ -65,8 +65,8 @@
                             <rect x="36" y="36" width="12" height="12" rx="2" />
                         </g>
                     </svg>
-                    <h1 class="text-3xl font-extrabold tracking-wide bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-                        MAMAKU
+                    <h1 class="text-xl font-extrabold tracking-wide bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+                        UMKM Manajemen
                     </h1>
                 </div>
             </header>

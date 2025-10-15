@@ -52,7 +52,7 @@ break 2; // keluar dari 2 loop
     class="fixed top-0 h-full w-64 bg-white shadow-xl flex flex-col transition-all duration-300"
     x-data="{ active: '{{ $active }}' }" :class="{'left-0':sidebarHide , '-left-full':sidebarHide== false}">
     <!-- Header -->
-    <div class="flex items-center gap-3 p-6 border-b border-gray-200 bg-white">
+    <div class="flex items-center gap-2 p-2 border-b border-gray-200 bg-white">
         <!-- SVG Icon: Inventory Rack -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"
             class="w-10 h-10">
@@ -72,8 +72,8 @@ break 2; // keluar dari 2 loop
         </svg>
 
         <!-- Gradient Text -->
-        <h1 class="text-2xl font-extrabold tracking-wide bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
-            MAMAKU
+        <h1 class="text-xl text-wrap font-extrabold tracking-wide bg-gradient-to-r from-pink-500 to-purple-600 bg-clip-text text-transparent">
+            UMKM Manajemen
         </h1>
     </div>
 

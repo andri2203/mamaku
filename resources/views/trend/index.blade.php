@@ -44,7 +44,7 @@
 <main
     class="p-6 rounded-xl shadow-lg bg-white border border-pink-200 w-full max-w-6xl mx-auto mb-4"
     x-data="{
-    trends: {{ Illuminate\Support\JS::from($trends) }},
+    trends: {{ Illuminate\Support\Js::from($trends) }},
     currentPage: 1,
     perPage: 5,
     get totalPages() {

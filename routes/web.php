@@ -169,6 +169,12 @@ Route::middleware('auth')->group(function () {
             Route::put('/two_factor_secret', [UserController::class, 'two_factor_secret'])->name('two_factor_secret');
             Route::put('/two_factor_recovery', [UserController::class, 'two_factor_recovery'])->name('two_factor_recovery');
         });
+
+        Route::prefix('trend')->name('trend.')->group(function () {
+            Route::get('/', [ReportController::class, 'trend_index'])->name('index');
+            Route::post('/', [ReportController::class, 'trend_index'])->name('proses');
+            Route::get('/cetak/{month}/{year}', [ReportController::class, 'trend_cetak'])->name('cetak');
+        });
     });
 
     // Routes for admin only

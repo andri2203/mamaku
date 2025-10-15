@@ -22,6 +22,7 @@ $navigations = [
 'text'=>'📑 Laporan',
 'nav'=> [
 'report' => '📑 Laporan Periode',
+'trend' => '📑 Trend Produk',
 'stock-report' => '📋 Stok per Produk',
 ],
 ],

@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\{Product, Transaction};
+use App\Models\{Product, Transaction, TransactionDetail};
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ReportController extends Controller
 {
@@ -210,5 +211,82 @@ class ReportController extends Controller
         ];
 
         return view('reports.cetak', $data);
+    }
+
+    /* Trend Section */
+    static private function trend_data($currentMonth, $currentYear)
+    {
+
+
+        return TransactionDetail::query()
+            ->select('product_id', DB::raw('SUM(quantity) as total_quantity'))
+            ->with(['product:id,name,brand'])
+            ->whereMonth('created_at', $currentMonth)
+            ->whereYear('created_at', $currentYear)
+            ->groupBy('product_id')
+            ->havingRaw('SUM(quantity) > 0')
+            ->orderByDesc('total_quantity')
+            ->get();
+    }
+
+    public function trend_index(Request $request)
+    {
+        $currentMonth = Carbon::now()->month;
+        $currentYear  = Carbon::now()->year;
+        $trendProducts = self::trend_data($currentMonth, $currentYear);
+
+        $data = [
+            'title' => 'Trend Produk',
+            'periode' =>  self::$months[$currentMonth - 1] . ' - ' . $currentYear,
+            'months' => self::$months,
+            'years' => Carbon::now()->year,
+            'trends' => $trendProducts,
+            'month_selected' => Carbon::now()->month,
+            'year_selected' => Carbon::now()->year,
+            'cta_cetak' => [
+                'month' => $currentMonth,
+                'year' => $currentYear,
+            ],
+        ];
+
+        if ($request->isMethod('POST')) {
+            $validated = $request->validate([
+                'month' => 'required',
+                'year' => 'required',
+            ]);
+
+            if ($validated['month'] + 1 == Carbon::now()->month && $validated['year'] == Carbon::now()->year) {
+                return redirect()->route('trend.index');
+            }
+
+            $currentMonth = $validated['month'];
+            $currentYear  = $validated['year'];
+            $trendProducts = self::trend_data($currentMonth, $currentYear);
+
+            $data['trends'] = $trendProducts;
+            $data['month_selected'] = $currentMonth;
+            $data['year_selected'] = $currentYear;
+            $data['periode'] = self::$months[$currentMonth - 1] . ' - ' . $currentYear;
+            $data['cta_cetak'] = [
+                'month' => $currentMonth,
+                'year' => $currentYear,
+            ];
+        }
+
+
+        return view('trend.index', $data);
+    }
+
+    public function trend_cetak($month, $year)
+    {
+        $trendProducts = self::trend_data($month, $year);
+
+        $data = [
+            'title' => 'Cetak Trend Produk',
+            'periode' =>  self::$months[$month - 1] . ' - ' . $year,
+            'trends' => $trendProducts,
+        ];
+
+        return view('trend.cetak', $data);
     }
 }

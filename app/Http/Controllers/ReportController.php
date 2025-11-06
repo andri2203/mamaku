@@ -255,7 +255,7 @@ class ReportController extends Controller
                 'year' => 'required',
             ]);
 
-            if ($validated['month'] + 1 == Carbon::now()->month && $validated['year'] == Carbon::now()->year) {
+            if ($validated['month'] == Carbon::now()->month && $validated['year'] == Carbon::now()->year) {
                 return redirect()->route('trend.index');
             }
 

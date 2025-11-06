@@ -61,11 +61,11 @@ class HomeController extends Controller
         $trendProducts = $transactionDetail->select('product_id', DB::raw('SUM(quantity) as total_quantity'))
             ->groupBy('product_id')
             ->orderByDesc('total_quantity')
-            ->limit(5)
+            ->limit(10)
             ->get();
 
         // get produk dengan stock 0
-        $products = Product::where('quantity', 0)->orderByDesc('name')->pluck('name');
+        $products = Product::where('quantity', "<=", 5)->orderByDesc('quantity')->get(['name', 'quantity']);
 
         $data = [
             'title' => 'Beranda',

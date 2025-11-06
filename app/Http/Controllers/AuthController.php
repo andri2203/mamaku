@@ -69,10 +69,10 @@ class AuthController extends Controller
             if (!is_null(Auth::user()->two_factor_secret)) {
                 return redirect()->intended('/two_factor_auth')
                     ->with('success', 'Login berhasil! Silahkan masukkan kode keamanan anda.');
+            } else {
+                return redirect()->intended('/')
+                    ->with('success', 'Login berhasil!');
             }
-
-            return redirect()->intended('/')
-                ->with('success', 'Login berhasil!');
         }
 
         return back()->withInput()->with('error', 'Email atau Password salah');

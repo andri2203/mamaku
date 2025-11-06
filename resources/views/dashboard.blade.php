@@ -162,7 +162,7 @@
                 <path fill-rule="evenodd" d="M15.22 6.268a.75.75 0 0 1 .968-.431l5.942 2.28a.75.75 0 0 1 .431.97l-2.28 5.94a.75.75 0 1 1-1.4-.537l1.63-4.251-1.086.484a11.2 11.2 0 0 0-5.45 5.173.75.75 0 0 1-1.199.19L9 12.312l-6.22 6.22a.75.75 0 0 1-1.06-1.061l6.75-6.75a.75.75 0 0 1 1.06 0l3.606 3.606a12.695 12.695 0 0 1 5.68-4.974l1.086-.483-4.251-1.632a.75.75 0 0 1-.432-.97Z" clip-rule="evenodd" />
             </svg>
 
-            <span class="text-lg">Trend Produk (5 Teratas)</span>
+            <span class="text-lg">Trend Produk (10 Teratas)</span>
         </h1>
         <canvas id="myPieChart"></canvas>
     </section>
@@ -183,7 +183,7 @@
                     d="M3 9.375C3 8.339 3.84 7.5 4.875 7.5h9.75c1.036 0 1.875.84 1.875 1.875v11.25c0 1.035-.84 1.875-1.875 1.875h-9.75A1.875 1.875 0 0 1 3 20.625V9.375ZM6 12a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V12Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 15a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V15Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75ZM6 18a.75.75 0 0 1 .75-.75h.008a.75.75 0 0 1 .75.75v.008a.75.75 0 0 1-.75.75H6.75a.75.75 0 0 1-.75-.75V18Zm2.25 0a.75.75 0 0 1 .75-.75h3.75a.75.75 0 0 1 0 1.5H9a.75.75 0 0 1-.75-.75Z"
                     clip-rule="evenodd" />
             </svg>
-            <span class="text-lg">Produk Stock Kosong</span>
+            <span class="text-lg">Produk Stock Kosong (Jumlah dibawah 5)</span>
         </h1>
 
         <!-- Content -->
@@ -193,8 +193,8 @@
                 :style="`animation-delay: {{ $loop->index * 0.1 }}s`"
                 class="flex justify-between items-center bg-white/70 rounded-lg px-4 py-2 text-sm border border-pink-100
                    opacity-0 animate-fadeInLeft">
-                <span class="text-gray-700 font-medium">{{ $product }}</span>
-                <span class="text-xs px-2 py-1 rounded-full bg-pink-200 text-pink-800 font-semibold">0</span>
+                <span class="text-gray-700 font-medium">{{ $product->name }}</span>
+                <span class="text-xs px-2 py-1 rounded-full bg-pink-200 text-pink-800 font-semibold">{{ $product->quantity }}</span>
             </div>
             @empty
             <p class="text-gray-500 italic">Semua produk memiliki stok tersedia 🎉</p>

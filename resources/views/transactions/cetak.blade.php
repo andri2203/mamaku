@@ -75,7 +75,7 @@
 
                     <!-- Gradient Text -->
                     <h1 class="text-2xl font-extrabold tracking-wide bg-gradient-text">
-                        MAMAKU
+                        UMKM Manajemen
                     </h1>
                 </div>
                 <h1 class="text-2xl font-bold">INVOICE</h1>
